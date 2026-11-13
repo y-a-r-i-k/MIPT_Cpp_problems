@@ -35,7 +35,12 @@ Bike::Bike (std::string id, std::string name, int score)
 
 ElectricScooter::ElectricScooter (std::string id, std::string name, double energy, int score)
   : Transport(std::move(id), std::move(name), score),
-    energyPerDay_(energy) {}
+    energyPerDay_(energy) 
+{
+  if (energyPerDay_ < 0) {
+    throw InvalidCommand("energy cannot be negative");
+  }    
+}
 
 double ElectricScooter::dailyEnergy() const {
   return energyPerDay_;
@@ -47,7 +52,12 @@ std::string ElectricScooter::describe() const {
 
 EBike::EBike (std::string id, std::string name, double energy, int score)
   : Transport(std::move(id), std::move(name), score),
-    energyPerDay_(energy) {}
+    energyPerDay_(energy) 
+{
+  if (energyPerDay_ < 0) {
+    throw InvalidCommand("energy cannot be negative");
+  }    
+}
 
 double EBike::dailyEnergy() const {
   return energyPerDay_;
