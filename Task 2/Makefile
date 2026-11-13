@@ -1,4 +1,3 @@
-# Makefile для проекта FizKat
 CXX      = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -O2
 SRC_DIR  = src
