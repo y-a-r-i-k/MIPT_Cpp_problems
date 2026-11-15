@@ -70,3 +70,17 @@ double EBike::dailyEnergy() const {
 std::string EBike::describe() const {
   return "электровелосипед " + name() + " (" + inventoryId() + ")";
 }
+
+PowerBank::PowerBank(std::string id, std::string name, double energy)
+    : id_(std::move(id)), name_(std::move(name)), energyPerDay_(energy)
+{
+    if (id_.empty()) throw InvalidCommand("id must not be empty");
+    if (energyPerDay_ < 0) throw InvalidCommand("energy cannot be negative");
+}
+
+std::string PowerBank::inventoryId() const { return id_; }
+std::string PowerBank::name() const { return name_; }
+std::string PowerBank::describe() const {
+    return "пауэрбанк " + name() + " (" + inventoryId() + ")";
+}
+double PowerBank::dailyEnergy() const { return energyPerDay_; }

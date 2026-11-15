@@ -2,6 +2,8 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <iomanip>
+
 #include "Fleet.hpp"
 #include "Transport.hpp"
 #include "Things.hpp"
@@ -18,6 +20,13 @@ int main() {
 #endif
 
     Fleet fleet;
+
+    // Общая спецификация модели (shared_ptr)
+    auto modelX = std::make_shared<ModelSpec>();
+    modelX->modelName = "ModelX";
+    modelX->manufacturer = "Физтех";
+    modelX->year = 2024;
+
     std::cout << "ФизКат — система учёта парка\n";
 
     std::string line;
@@ -40,14 +49,18 @@ int main() {
                     std::string id, name;
                     double energy;
                     int score;
-                    iss >> id >> name >> energy >> score;
-                    auto scooter = std::make_unique<ElectricScooter>(id, name, energy, score);
+                    if (!(iss >> id >> name >> energy >> score)) {
+                        throw InvalidCommand("invalid arguments for scooter");
+                    }
+                    auto scooter = std::make_unique<ElectricScooter>(id, name, energy, score, modelX);
                     fleet.add(std::move(scooter));
                 }
                 else if (type == "bike") {
                     std::string id, name;
                     int score;
-                    iss >> id >> name >> score;
+                    if (!(iss >> id >> name >> score)) {
+                        throw InvalidCommand("invalid arguments for bike");
+                    }
                     auto bike = std::make_unique<Bike>(id, name, score);
                     fleet.add(std::move(bike));
                 }
@@ -55,29 +68,43 @@ int main() {
                     std::string id, name;
                     double energy;
                     int score;
-                    iss >> id >> name >> energy >> score;
-                    auto ebike = std::make_unique<EBike>(id, name, energy, score);
+                    if (!(iss >> id >> name >> energy >> score)) {
+                        throw InvalidCommand("invalid arguments for ebike");
+                    }
+                    auto ebike = std::make_unique<EBike>(id, name, energy, score, modelX);
                     fleet.add(std::move(ebike));
                 }
                 else if (type == "helmet") {
                     std::string id, name;
-                    iss >> id >> name;
+                    if (!(iss >> id >> name)) {
+                        throw InvalidCommand("invalid arguments for helmet");
+                    }
                     auto helmet = std::make_unique<Helmet>(id, name);
                     fleet.add(std::move(helmet));
                 }
                 else if (type == "dock") {
                     std::string id, name;
                     double energy;
-                    iss >> id >> name >> energy;
+                    if (!(iss >> id >> name >> energy)) {
+                        throw InvalidCommand("invalid arguments for dock");
+                    }
                     auto dock = std::make_unique<DockStation>(id, name, energy);
                     fleet.add(std::move(dock));
+                } else if (type == "powerbank") {
+                    std::string id, name;
+                    double energy;
+                    if (!(iss >> id >> name >> energy)) {
+                        throw InvalidCommand("invalid arguments for powerbank");
+                    }
+                    auto pb = std::make_unique<PowerBank>(id, name, energy);
+                    fleet.add(std::move(pb));
                 }
                 else {
                     throw InvalidCommand("unknown add type");
                 }
             }
             else if (cmd == "energy") {
-                std::cout << fleet.totalEnergy() << "\n";
+                std::cout << std::fixed << std::setprecision(1) << fleet.totalEnergy() << "\n";
             }
             else if (cmd == "novice") {
                 fleet.printNovice(std::cout);
@@ -87,7 +114,9 @@ int main() {
             }
             else if (cmd == "focus") {
                 std::string id;
-                iss >> id;
+                if (!(iss >> id)) {
+                    throw InvalidCommand("focus requires id");
+                }
                 fleet.setFocus(id);
             }
             else if (cmd == "show_focus") {
@@ -95,14 +124,21 @@ int main() {
             }
             else if (cmd == "remove") {
                 std::string id;
-                iss >> id;
+                if (!(iss >> id)) {
+                    throw InvalidCommand("remove requires id");
+                }
                 fleet.remove(id);
+            } else if (cmd == "count") {
+               std::cout << fleet.size() << "\n";
             }
             else {
                 throw InvalidCommand("unknown command");
             }
         }
         catch (const FleetError& e) {
+            std::cout << "error: " << e.what() << "\n";
+        }
+        catch (const std::exception& e) {
             std::cout << "error: " << e.what() << "\n";
         }
     }
