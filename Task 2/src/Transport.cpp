@@ -33,13 +33,15 @@ bool Transport::isNoviceFriendly() const {
 Bike::Bike (std::string id, std::string name, int score)
   : Transport(std::move(id), std::move(name), score) {}
 
-ElectricScooter::ElectricScooter (std::string id, std::string name, double energy, int score)
-  : Transport(std::move(id), std::move(name), score),
-    energyPerDay_(energy) 
+ElectricScooter::ElectricScooter(std::string id, std::string name, double energy, int score,
+                                 std::shared_ptr<ModelSpec> spec)
+    : Transport(std::move(id), std::move(name), score),
+      energyPerDay_(energy),
+      spec_(std::move(spec))
 {
-  if (energyPerDay_ < 0) {
-    throw InvalidCommand("energy cannot be negative");
-  }    
+    if (energyPerDay_ < 0) {
+        throw InvalidCommand("energy cannot be negative");
+    }
 }
 
 double ElectricScooter::dailyEnergy() const {
@@ -50,13 +52,15 @@ std::string ElectricScooter::describe() const {
   return "электросамокат " + name() + " (" + inventoryId() + ")";
 }
 
-EBike::EBike (std::string id, std::string name, double energy, int score)
-  : Transport(std::move(id), std::move(name), score),
-    energyPerDay_(energy) 
+EBike::EBike(std::string id, std::string name, double energy, int score,
+                                 std::shared_ptr<ModelSpec> spec)
+    : Transport(std::move(id), std::move(name), score),
+      energyPerDay_(energy),
+      spec_(std::move(spec))
 {
-  if (energyPerDay_ < 0) {
-    throw InvalidCommand("energy cannot be negative");
-  }    
+    if (energyPerDay_ < 0) {
+        throw InvalidCommand("energy cannot be negative");
+    }
 }
 
 double EBike::dailyEnergy() const {

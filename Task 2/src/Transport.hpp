@@ -2,9 +2,16 @@
 
 #include "Inventory.hpp"
 #include "EnergyConsumer.hpp"
-#include <string>
 
-// Базвоый класс для транспорта
+#include <string>
+#include <memory>
+
+struct ModelSpec {
+    std::string modelName;
+    std::string manufacturer;
+    int year = 2024;
+};
+
 class Transport : public InventoryItem {
 protected:
     std::string id_;
@@ -30,9 +37,11 @@ public:
 class ElectricScooter : public Transport, public EnergyConsumer {
 private:
     double energyPerDay_;
+    std::shared_ptr<ModelSpec> spec_;
 
 public:
-    ElectricScooter(std::string id, std::string name, double energy, int score);
+    ElectricScooter(std::string id, std::string name, double energy, int score,
+                    std::shared_ptr<ModelSpec> spec = nullptr);
 
     double dailyEnergy() const override;
     std::string describe() const override;
@@ -41,9 +50,11 @@ public:
 class EBike : public Transport, public EnergyConsumer {
 private:
     double energyPerDay_;
+    std::shared_ptr<ModelSpec> spec_;
 
 public:
-    EBike(std::string id, std::string name, double energy, int score);
+    EBike(std::string id, std::string name, double energy, int score,
+          std::shared_ptr<ModelSpec> spec = nullptr);
 
     double dailyEnergy() const override;
     std::string describe() const override;
