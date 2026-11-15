@@ -32,8 +32,10 @@ int Registry<T, Capacity>::size() const {
 template<typename T, int Capacity>
 T* Registry<T, Capacity>::operator[](int index) {
   if (index < 0 || index > Capacity) {
-    throw std::runtime_error("Index out of range")
+    throw std::runtime_error("Index out of range");
   }
+
+  return data_[index];
 }
 
 template<typename T, int Capacity>

@@ -23,6 +23,7 @@ void Fleet::add(std::unique_ptr<InventoryItem> item) {
     }
 
     items_.push_back(std::move(item));
+    recent_.add(items_.back().get());
 }
 
 bool Fleet::remove(const std::string& id) {
