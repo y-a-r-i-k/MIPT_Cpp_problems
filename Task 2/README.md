@@ -1,6 +1,6 @@
 # ФизКат — учёт парка
 
-Консольное приложение для учёта парка самокатов, велосипедов и вещей.
+Это - консольное приложение для учёта парка самокатов, велосипедов и вещей.
 
 ## Сборка и запуск
 ```bash
@@ -42,3 +42,41 @@ EnergyConsumer (абстрактный)
 ## Креативная часть
 - Новый тип: `PowerBank` (пауэрбанк) + команда `add powerbank id name energy`.
 - Дополнительная команда: `count` — выводит количество единиц на балансе.
+
+
+## Пример работы:
+
+Ввод:
+```
+add scooter S-1 ModelX 2.5 8
+add bike B-1 City 4
+add scooter S-2 brokenX 1.0 9
+add helmet H-1 Pro
+add dock D-1 Hub 10.0
+add powerbank P-1 Charge 1.5
+list
+novice
+energy
+count
+focus S-1
+show_focus
+remove S-1
+show_focus
+quit
+```
+
+Вывод: 
+```
+error: inspection rejected
+City B-1
+Hub D-1
+Pro H-1
+Charge P-1
+ModelX S-1
+ModelX S-1
+14.0
+5
+removed
+removed
+```
+(в реальном выводе были небольшие проблемы с кодировкой, в примере эти сторки вырезаны)
