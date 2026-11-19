@@ -41,6 +41,10 @@ std::string DockStation::describe() const {
   return "док-станция " + name() + " (" + inventoryId() + ")";
 }
 
+double DockStation::dailyEnergy() const {
+    return energyPerDay_;
+}
+
 PowerBank::PowerBank(std::string id, std::string name, double energy)
     : id_(std::move(id)), name_(std::move(name)), energyPerDay_(energy)
 {
