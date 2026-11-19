@@ -9,12 +9,12 @@
 
 class Fleet {
 private:
-    std::vector<std::unique_ptr<InventoryItem>> items_;
+    std::vector<std::shared_ptr<InventoryItem>> items_;
     std::weak_ptr<InventoryItem> focus_;
     Registry<InventoryItem, 50> recent_;
 
 public:
-    void add(std::unique_ptr<InventoryItem> item);
+    void add(std::shared_ptr<InventoryItem> item);
     bool remove(const std::string& id);
 
     double totalEnergy() const;

@@ -52,8 +52,8 @@ int main() {
                     if (!(iss >> id >> name >> energy >> score)) {
                         throw InvalidCommand("invalid arguments for scooter");
                     }
-                    auto scooter = std::make_unique<ElectricScooter>(id, name, energy, score, modelX);
-                    fleet.add(std::move(scooter));
+                    auto scooter = std::make_shared<ElectricScooter>(id, name, energy, score, modelX);
+                    fleet.add(scooter);
                 }
                 else if (type == "bike") {
                     std::string id, name;
@@ -61,8 +61,8 @@ int main() {
                     if (!(iss >> id >> name >> score)) {
                         throw InvalidCommand("invalid arguments for bike");
                     }
-                    auto bike = std::make_unique<Bike>(id, name, score);
-                    fleet.add(std::move(bike));
+                    auto bike = std::make_shared<Bike>(id, name, score);
+                    fleet.add(bike);
                 }
                 else if (type == "ebike") {
                     std::string id, name;
@@ -71,16 +71,16 @@ int main() {
                     if (!(iss >> id >> name >> energy >> score)) {
                         throw InvalidCommand("invalid arguments for ebike");
                     }
-                    auto ebike = std::make_unique<EBike>(id, name, energy, score, modelX);
-                    fleet.add(std::move(ebike));
+                    auto ebike = std::make_shared<EBike>(id, name, energy, score, modelX);
+                    fleet.add(ebike);
                 }
                 else if (type == "helmet") {
                     std::string id, name;
                     if (!(iss >> id >> name)) {
                         throw InvalidCommand("invalid arguments for helmet");
                     }
-                    auto helmet = std::make_unique<Helmet>(id, name);
-                    fleet.add(std::move(helmet));
+                    auto helmet = std::make_shared<Helmet>(id, name);
+                    fleet.add(helmet);
                 }
                 else if (type == "dock") {
                     std::string id, name;
@@ -88,16 +88,17 @@ int main() {
                     if (!(iss >> id >> name >> energy)) {
                         throw InvalidCommand("invalid arguments for dock");
                     }
-                    auto dock = std::make_unique<DockStation>(id, name, energy);
-                    fleet.add(std::move(dock));
-                } else if (type == "powerbank") {
+                    auto dock = std::make_shared<DockStation>(id, name, energy);
+                    fleet.add(dock);
+                }
+                else if (type == "powerbank") {
                     std::string id, name;
                     double energy;
                     if (!(iss >> id >> name >> energy)) {
                         throw InvalidCommand("invalid arguments for powerbank");
                     }
-                    auto pb = std::make_unique<PowerBank>(id, name, energy);
-                    fleet.add(std::move(pb));
+                    auto pb = std::make_shared<PowerBank>(id, name, energy);
+                    fleet.add(pb);
                 }
                 else {
                     throw InvalidCommand("unknown add type");
@@ -128,8 +129,9 @@ int main() {
                     throw InvalidCommand("remove requires id");
                 }
                 fleet.remove(id);
-            } else if (cmd == "count") {
-               std::cout << fleet.size() << "\n";
+            }
+            else if (cmd == "count") {
+                std::cout << fleet.size() << "\n";
             }
             else {
                 throw InvalidCommand("unknown command");

@@ -13,7 +13,7 @@ static bool containsBroken(const std::string& name) {
   return lower.find("broken") != std::string::npos;
 }
 
-void Fleet::add(std::unique_ptr<InventoryItem> item) {
+void Fleet::add(std::shared_ptr<InventoryItem> item) {
     if (!item) {
         throw InvalidCommand("cannot add null item");
     }
@@ -26,18 +26,14 @@ void Fleet::add(std::unique_ptr<InventoryItem> item) {
     recent_.add(items_.back().get());
 }
 
-bool Fleet::remove(const std::string& id) {
-    auto it = std::find_if(items_.begin(), items_.end(),
-        [&id](const std::unique_ptr<InventoryItem>& item) {
-            return item && item->inventoryId() == id;
-        });
-
-    if (it != items_.end()) {
-        items_.erase(it);
-        return true;
+void Fleet::setFocus(const std::string& id) {
+    for (const auto& item : items_) {
+        if (item->inventoryId() == id) {
+            focus_ = item;
+            return;
+        }
     }
-
-    return false;
+    focus_.reset();
 }
 
 double Fleet::totalEnergy() const {
