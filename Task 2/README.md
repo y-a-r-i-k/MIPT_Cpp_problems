@@ -1,6 +1,6 @@
 # ФизКат — учёт парка
 
-Это - консольное приложение для учёта парка самокатов, велосипедов и вещей.
+Консольное приложение для учёта парка самокатов, велосипедов и вещей.
 
 ## Сборка и запуск
 ```bash
@@ -26,9 +26,9 @@ EnergyConsumer (абстрактный)
 Множественное наследование используется в `ElectricScooter`, `EBike`, `DockStation`, `PowerBank`.
 
 ## Smart-указатели
-- `unique_ptr<InventoryItem>` — владение единицами парка (`Fleet::items_`).
+- `shared_ptr<InventoryItem>` — владение принятыми единицами парка (`Fleet::items_` — `vector<shared_ptr<InventoryItem>>`).
 - `shared_ptr<ModelSpec>` — общая спецификация модели (используется в самокатах и электровелосипедах).
-- `weak_ptr<InventoryItem>` — фокус (`focus` / `show_focus`). После `remove` становится expired.
+- `weak_ptr<InventoryItem>` — витрина (`focus` / `show_focus`). После `remove` становится expired и выводится `removed`.
 
 ## Исключения
 - `FleetError` — базовый.
@@ -43,8 +43,7 @@ EnergyConsumer (абстрактный)
 - Новый тип: `PowerBank` (пауэрбанк) + команда `add powerbank id name energy`.
 - Дополнительная команда: `count` — выводит количество единиц на балансе.
 
-
-## Пример работы:
+## Пример работы
 
 Ввод:
 ```
@@ -65,18 +64,19 @@ show_focus
 quit
 ```
 
-Вывод: 
+Вывод:
 ```
 error: inspection rejected
-City B-1
-Hub D-1
-Pro H-1
-Charge P-1
-ModelX S-1
-ModelX S-1
+B-1 City
+D-1 Hub
+H-1 Pro
+P-1 Charge
+S-1 ModelX
+S-1 ModelX
 14.0
 5
-removed
+S-1 ModelX
 removed
 ```
+
 (в реальном выводе были небольшие проблемы с кодировкой, в примере эти сторки вырезаны)
