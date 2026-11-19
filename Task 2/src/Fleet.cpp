@@ -7,10 +7,10 @@
 #include <iostream>
 
 static bool containsBroken(const std::string& name) {
-  std::string lower = name;
-  std::transform(lower.begin(), lower.end(), lower.begin(), 
-                 [](unsigned char c) {return std::tolower(c);});
-  return lower.find("broken") != std::string::npos;
+    std::string lower = name;
+    std::transform(lower.begin(), lower.end(), lower.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+    return lower.find("broken") != std::string::npos;
 }
 
 void Fleet::add(std::shared_ptr<InventoryItem> item) {
@@ -26,24 +26,27 @@ void Fleet::add(std::shared_ptr<InventoryItem> item) {
     recent_.add(items_.back().get());
 }
 
-void Fleet::setFocus(const std::string& id) {
-    for (const auto& item : items_) {
-        if (item->inventoryId() == id) {
-            focus_ = item;
-            return;
-        }
+bool Fleet::remove(const std::string& id) {
+    auto it = std::find_if(items_.begin(), items_.end(),
+        [&id](const std::shared_ptr<InventoryItem>& item) {
+            return item && item->inventoryId() == id;
+        });
+
+    if (it != items_.end()) {
+        items_.erase(it);
+        return true;
     }
-    focus_.reset();
+    return false;
 }
 
 double Fleet::totalEnergy() const {
-  double totalEnergySum = 0;
+    double totalEnergySum = 0.0;
 
-  for (const auto& item : items_) {
-    totalEnergySum += item->dailyEnergy();
-  }
+    for (const auto& item : items_) {
+        totalEnergySum += item->dailyEnergy();
+    }
 
-  return totalEnergySum;
+    return totalEnergySum;
 }
 
 void Fleet::printNovice(std::ostream& os) const {
@@ -77,8 +80,7 @@ void Fleet::printAll(std::ostream& os) const {
 void Fleet::setFocus(const std::string& id) {
     for (const auto& item : items_) {
         if (item->inventoryId() == id) {
-            std::shared_ptr<InventoryItem> temp(item.get(), [](InventoryItem*) {});
-            focus_ = temp;
+            focus_ = item;
             return;
         }
     }
@@ -94,5 +96,5 @@ void Fleet::showFocus(std::ostream& os) const {
 }
 
 size_t Fleet::size() const {
-  return items_.size();
+    return items_.size();
 }
